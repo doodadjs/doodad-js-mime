@@ -37,7 +37,7 @@
 			type: null,
 			version: '0b',
 			namespaces: null,
-			dependencies: ['Doodad.Tools'],
+			dependencies: ['Doodad.Tools', 'Doodad.Types', 'Doodad.Namespaces', 'Doodad.Modules'],
 			
 			create: function create(root, /*optional*/_options) {
 				"use strict";
@@ -46,6 +46,7 @@
 					types = doodad.Types,
 					tools = doodad.Tools,
 					namespaces = doodad.Namespaces,
+					modules = doodad.Modules,
 					config = tools.Config,
 					mime = tools.Mime;
 				
@@ -109,9 +110,11 @@
 					//var configPath = null;
 					//config.loadFile('http://localhost/doodadjs/res/mimeExtensions.json', 
 						
-					var configPath = tools.getCurrentScript((global.document?document.currentScript:module.filename)||(function(){try{throw new Error("");}catch(ex){return ex;}})());
-					var path = tools.options.hooks.pathParser('./res/mimeExtensions.json');
-					return config.loadFile(path, {async: true, watch: true, configPath: configPath, encoding: 'utf8'}, [__Internal__.parseMimeExtensions, callback]);
+					var configPath = tools.getCurrentScript((global.document?document.currentScript:module.filename) || (function (){ try { throw new Error(""); } catch (ex) { return ex; } })());
+					return modules.locate('doodad-js-mime').then(function(location) {
+						var path = tools.options.hooks.pathParser(global.process && root.startupOptions.settings.fromSource ? './src/common/res/mimeExtensions.json' : './res/mimeExtensions.json');
+						return config.loadFile(path, { async: true, watch: true, configPath: location, encoding: 'utf8' }, [__Internal__.parseMimeExtensions, callback]);
+					});
 				};
 
 
