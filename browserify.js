@@ -28,9 +28,9 @@ module.exports = {
 		DD_MODULES = (DD_MODULES || {});
 		DD_MODULES['doodad-js-mime'] = {
 			type: null,
-			version: '0a',
+			version: '0.2.0b',
 			namespaces: null,
-			dependencies: [],
+			dependencies: null,
 			exports: module.exports,
 			
 			create: function create(root, /*optional*/_options) {
@@ -40,21 +40,12 @@ module.exports = {
 				} catch(ex) {
 				};
 				
-				var fromSource = root.getOptions().settings.fromSource,
-					modules = {};
+				var modules = {};
 				
 				require('./browserify/resources.js').add(modules);
-
-				if (fromSource) {
-					require("./dist/doodad-js-mime/Tools_Mime.js").add(modules);
-				} else {
-					// TODO: Find a way to prevent browserify to bundle both versions.
-					//require("./dist/doodad-js-mime/Tools_Mime.min.js").add(modules);
-					
-					require("./dist/doodad-js-mime/Tools_Mime.js").add(modules);
-				};
+				require("./dist/doodad-js-mime/Tools_Mime.js").add(modules);
 				
-				return root.Doodad.Namespaces.loadNamespaces(null, false, config, modules);
+				return root.Doodad.Namespaces.loadNamespaces(modules, null, config, false);
 			},
 		};
 		return DD_MODULES;
