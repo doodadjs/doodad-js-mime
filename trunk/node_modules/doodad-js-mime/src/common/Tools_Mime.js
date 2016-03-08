@@ -35,9 +35,9 @@
 		DD_MODULES = (DD_MODULES || {});
 		DD_MODULES['Doodad.Tools.Mime'] = {
 			type: null,
-			version: '0b',
+			version: '0.2.0b',
 			namespaces: null,
-			dependencies: ['Doodad.Tools', 'Doodad.Types', 'Doodad.Namespaces', 'Doodad.Modules'],
+			dependencies: ['Doodad.Tools', 'Doodad.Tools.Files', 'Doodad.Types', 'Doodad.Namespaces', 'Doodad.Modules'],
 			
 			create: function create(root, /*optional*/_options) {
 				"use strict";
@@ -45,6 +45,7 @@
 				var doodad = root.Doodad,
 					types = doodad.Types,
 					tools = doodad.Tools,
+					files = tools.Files,
 					namespaces = doodad.Namespaces,
 					modules = doodad.Modules,
 					config = tools.Config,
@@ -76,7 +77,7 @@
 							locate: function locate(fileName, /*optional*/options) {
 								return modules.locate('doodad-js-mime')
 									.then(function(location) {
-										return location.set({file: null}).combine(tools.getOptions().hooks.pathParser(mime.getOptions().settings.resourcesPath)).combine(tools.getOptions().hooks.pathParser(fileName));
+										return location.set({file: null}).combine(files.getOptions().hooks.pathParser(mime.getOptions().settings.resourcesPath)).combine(files.getOptions().hooks.pathParser(fileName));
 									});
 							},
 							load: function load(path, /*optional*/options) {

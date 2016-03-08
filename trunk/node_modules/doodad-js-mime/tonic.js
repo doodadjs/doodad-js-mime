@@ -5,12 +5,12 @@ const root = require('doodad-js').createRoot( /*bootstrapModules*/ null, /*optio
 const modules = {};
 require('doodad-js-mime').add(modules);
 
-root.Doodad.Namespaces.loadNamespaces( function callback() {
-	
+function startup() {
 	const mime = root.Doodad.Tools.Mime;
 	console.log( mime.getExtensions('text/plain') );
-	
-}, /*donThrow*/ false, /*options*/ null, modules )
+};
+
+root.Doodad.Namespaces.loadNamespaces( modules, startup )
 	['catch'](function(err) {
 		console.error(err);
 	});
