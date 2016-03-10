@@ -1,6 +1,6 @@
 {
   "name": "doodad-js-mime",
-  "version": "0.2.1",
+  "version": "0.2.4",
   "description": "doodad-js Mime (beta)",
   "homepage": "https://sourceforge.net/projects/doodad-js/",
   "main": "index.js",

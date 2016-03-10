@@ -37,7 +37,7 @@
 			type: null,
 			version: '0.2.0b',
 			namespaces: null,
-			dependencies: ['Doodad.Tools', 'Doodad.Tools.Files', 'Doodad.Types', 'Doodad.Namespaces', 'Doodad.Modules'],
+			dependencies: ['Doodad.Tools', 'Doodad.Tools.Config', 'Doodad.Tools.Files', 'Doodad.Types', 'Doodad.Namespaces', 'Doodad.Modules'],
 			
 			create: function create(root, /*optional*/_options) {
 				"use strict";
