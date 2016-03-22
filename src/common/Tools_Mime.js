@@ -35,7 +35,7 @@
 		DD_MODULES = (DD_MODULES || {});
 		DD_MODULES['Doodad.Tools.Mime'] = {
 			type: null,
-			version: '0.2.0b',
+			version: '0.2.5b',
 			namespaces: null,
 			dependencies: ['Doodad.Tools', 'Doodad.Tools.Config', 'Doodad.Tools.Files', 'Doodad.Types', 'Doodad.Namespaces', 'Doodad.Modules'],
 			
@@ -61,7 +61,7 @@
 				__Internal__.oldSetOptions = mime.setOptions;
 				mime.setOptions = function setOptions(/*paramarray*/) {
 					var options = __Internal__.oldSetOptions.apply(this, arguments),
-						settings = types.getDefault(options, 'settings', {});
+						settings = types.get(options, 'settings', {});
 						
 					settings.enableDomObjectsModel = types.toBoolean(types.get(settings, 'enableDomObjectsModel'));
 					settings.defaultScriptTimeout = parseInt(types.get(settings, 'defaultScriptTimeout'));
@@ -81,7 +81,7 @@
 									});
 							},
 							load: function load(path, /*optional*/options) {
-								return config.loadFile(path, { async: true, watch: true, encoding: 'utf8' }, types.get(options, 'callback'));
+								return config.loadFile(path, { async: true, watch: true, encoding: 'utf-8' }, types.get(options, 'callback'));
 							},
 						},
 					},
