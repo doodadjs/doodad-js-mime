@@ -1,5 +1,5 @@
 // dOOdad - Object-oriented programming framework
-// File: index.js - Will get replaced on build.
+// File: browserify.js - Module startup file for 'browserify'.
 // Project home: https://sourceforge.net/projects/doodad-js/
 // Trunk: svn checkout svn://svn.code.sf.net/p/doodad-js/code/trunk doodad-js-code
 // Author: Claude Petit, Quebec city
@@ -23,4 +23,38 @@
 
 "use strict";
 
-module.exports = require('./src/common/index.js');
+module.exports = {
+	add: function add(DD_MODULES) {
+		DD_MODULES = (DD_MODULES || {});
+		DD_MODULES['doodad-js-mime'] = {
+			type: 'Package',
+			//! INSERT("version:'" + VERSION('doodad-js-mime') + "',")
+			namespaces: null,
+			dependencies: [
+				{
+					name: 'doodad-js',
+					//! INSERT("version:'" + VERSION('doodad-js') + "',")
+				},
+			],
+			
+			create: function create(root, /*optional*/_options) {
+				var config = null;
+				try {
+					config = require('./dist/doodad-js-mime/config.json');
+				} catch(ex) {
+				};
+				
+				var modules = {};
+				
+				require('./browserify/resources.js').add(modules);
+				require("./dist/doodad-js-mime/Tools_Mime.min.js").add(modules);
+				
+				return root.Doodad.Namespaces.loadNamespaces(modules, null, config, false)
+					.then(function() {
+						// Returns nothing
+					});
+			},
+		};
+		return DD_MODULES;
+	},
+};
