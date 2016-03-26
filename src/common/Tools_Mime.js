@@ -35,9 +35,9 @@
 		DD_MODULES = (DD_MODULES || {});
 		DD_MODULES['Doodad.Tools.Mime'] = {
 			type: null,
-			version: '0.2.5b',
+			//! INSERT("version:'" + VERSION('doodad-js-mime') + "',")
 			namespaces: null,
-			dependencies: ['Doodad.Tools', 'Doodad.Tools.Config', 'Doodad.Tools.Files', 'Doodad.Types', 'Doodad.Namespaces', 'Doodad.Modules'],
+			dependencies: null,
 			
 			create: function create(root, /*optional*/_options) {
 				"use strict";

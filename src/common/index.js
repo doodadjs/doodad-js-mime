@@ -1,5 +1,5 @@
 // dOOdad - Object-oriented programming framework
-// File: browserify.js - Module startup file for 'browserify'.
+// File: index.js - Mime module startup file
 // Project home: https://sourceforge.net/projects/doodad-js/
 // Trunk: svn checkout svn://svn.code.sf.net/p/doodad-js/code/trunk doodad-js-code
 // Author: Claude Petit, Quebec city
@@ -21,33 +21,48 @@
 //	See the License for the specific language governing permissions and
 //	limitations under the License.
 
-"use strict";
+(function() {
+	var global = this;
 
-module.exports = {
-	add: function add(DD_MODULES) {
+	var exports = {};
+	if (typeof process === 'object') {
+		module.exports = exports;
+	};
+	
+	var MODULE_NAME = 'doodad-js-mime';
+	
+	exports.add = function add(DD_MODULES) {
 		DD_MODULES = (DD_MODULES || {});
-		DD_MODULES['doodad-js-mime'] = {
-			type: null,
-			version: '0.2.5b',
+		DD_MODULES[MODULE_NAME] = {
+			type: 'Package',
+			//! INSERT("version:'" + VERSION('doodad-js-mime') + "',")
 			namespaces: null,
-			dependencies: null,
-			exports: module.exports,
+			dependencies: [
+				{
+					name: 'doodad-js',
+					//! INSERT("version:'" + VERSION('doodad-js') + "',")
+				},
+			],
 			
 			create: function create(root, /*optional*/_options) {
-				var config = null;
-				try {
-					config = require('./dist/doodad-js-mime/config.json');
-				} catch(ex) {
-				};
+				"use strict";
 				
-				var modules = {};
+				var doodad = root.Doodad,
+					modules = doodad.Modules;
 				
-				require('./browserify/resources.js').add(modules);
-				require("./dist/doodad-js-mime/Tools_Mime.min.js").add(modules);
-				
-				return root.Doodad.Namespaces.loadNamespaces(modules, null, config, false);
+				var fromSource = root.getOptions().settings.fromSource;
+
+				return modules.load(MODULE_NAME, (fromSource ? (global.process ? 'src/common/Tools_Mime.js' : 'Tools_Mime.js') : 'Tools_Mime.min.js'), _options)
+					.then(function() {
+						// Returns nothing
+					});
 			},
 		};
 		return DD_MODULES;
-	},
-};
+	};
+	
+	if (typeof process !== 'object') {
+		// <PRB> export/import are not yet supported in browsers
+		global.DD_MODULES = exports.add(global.DD_MODULES);
+	};
+}).call((typeof global !== 'undefined') ? global : ((typeof window !== 'undefined') ? window : this));
