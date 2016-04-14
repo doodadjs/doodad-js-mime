@@ -43,6 +43,18 @@
 		DD_MODULES['Doodad.Tools.Mime'] = {
 			version: /*! REPLACE_BY(TO_SOURCE(VERSION(MANIFEST("name")))) */ null /*! END_REPLACE() */,
 			
+			proto: function(root) {
+				var types = root.Doodad.Types;
+				return {
+					setOptions: types.SUPER(function setOptions(/*paramarray*/) {
+						options = this._super.apply(this, arguments);
+						options.enableDomObjectsModel = types.toBoolean(types.get(options, 'enableDomObjectsModel'));
+						options.defaultScriptTimeout = parseInt(types.get(options, 'defaultScriptTimeout'));
+						return options;
+					}),
+				};
+			},
+			
 			create: function create(root, /*optional*/_options) {
 				"use strict";
 				
@@ -62,14 +74,6 @@
 				};
 
 
-				__Internal__.oldSetOptions = mime.setOptions;
-				mime.setOptions = function setOptions(/*paramarray*/) {
-					var options = __Internal__.oldSetOptions.apply(this, arguments);
-						
-					options.enableDomObjectsModel = types.toBoolean(types.get(options, 'enableDomObjectsModel'));
-					options.defaultScriptTimeout = parseInt(types.get(options, 'defaultScriptTimeout'));
-				};
-				
 				mime.setOptions({
 					resourcesPath: './res/', // Combined with package's root folder
 					hooks: {
