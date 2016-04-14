@@ -57,7 +57,7 @@ Then load 'doodad-js-mime' and its dependencies :
 		console.log(mime.getExtensions('text/plain'));
     };
     
-    namespaces.loadNamespaces(modules, startup);
+    namespaces.load(modules, startup);
 ```
 
 ## Example

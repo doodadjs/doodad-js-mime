@@ -1,4 +1,4 @@
-//! REPLACE_BY("// Copyright 2016 Claude Petit, licensed under Apache License version 2.0\n")
+//! REPLACE_BY("// Copyright 2016 Claude Petit, licensed under Apache License version 2.0\n", true)
 // dOOdad - Object-oriented programming framework
 // File: Tools_Mime.js - Mime Tools
 // Project home: https://sourceforge.net/projects/doodad-js/
@@ -27,17 +27,21 @@
 	var global = this;
 
 	var exports = {};
-	if (typeof process === 'object') {
-		module.exports = exports;
+	
+	//! BEGIN_REMOVE()
+	if ((typeof process === 'object') && (typeof module === 'object')) {
+	//! END_REMOVE()
+		//! IF_DEF("serverSide")
+			module.exports = exports;
+		//! END_IF()
+	//! BEGIN_REMOVE()
 	};
+	//! END_REMOVE()
 	
 	exports.add = function add(DD_MODULES) {
 		DD_MODULES = (DD_MODULES || {});
 		DD_MODULES['Doodad.Tools.Mime'] = {
-			type: null,
-			//! INSERT("version:'" + VERSION('doodad-js-mime') + "',")
-			namespaces: null,
-			dependencies: null,
+			version: /*! REPLACE_BY(TO_SOURCE(VERSION(MANIFEST("name")))) */ null /*! END_REPLACE() */,
 			
 			create: function create(root, /*optional*/_options) {
 				"use strict";
@@ -60,25 +64,26 @@
 
 				__Internal__.oldSetOptions = mime.setOptions;
 				mime.setOptions = function setOptions(/*paramarray*/) {
-					var options = __Internal__.oldSetOptions.apply(this, arguments),
-						settings = types.get(options, 'settings', {});
+					var options = __Internal__.oldSetOptions.apply(this, arguments);
 						
-					settings.enableDomObjectsModel = types.toBoolean(types.get(settings, 'enableDomObjectsModel'));
-					settings.defaultScriptTimeout = parseInt(types.get(settings, 'defaultScriptTimeout'));
+					options.enableDomObjectsModel = types.toBoolean(types.get(options, 'enableDomObjectsModel'));
+					options.defaultScriptTimeout = parseInt(types.get(options, 'defaultScriptTimeout'));
 				};
 				
 				mime.setOptions({
-					settings: {
-						resourcesPath: './res/', // Combined with package's root folder
-					},
+					resourcesPath: './res/', // Combined with package's root folder
 					hooks: {
 						// TODO: Make a better and common resources locator and loader
 						resourcesLoader: {
 							locate: function locate(fileName, /*optional*/options) {
-								return modules.locate('doodad-js-mime')
-									.then(function(location) {
-										return location.set({file: null}).combine(files.getOptions().hooks.pathParser(mime.getOptions().settings.resourcesPath)).combine(files.getOptions().hooks.pathParser(fileName));
-									});
+								var Promise = types.getPromise();
+								var filesOptions = files.getOptions();
+								var mimeOptions = mime.getOptions();
+								var path = tools.getCurrentScript((global.document?document.currentScript:module.filename)||(function(){try{throw new Error("");}catch(ex){return ex;}})())
+									.set({file: null})
+									.combine(filesOptions.hooks.pathParser(mimeOptions.resourcesPath))
+									.combine(filesOptions.hooks.pathParser(fileName));
+								return Promise.resolve(path);
 							},
 							load: function load(path, /*optional*/options) {
 								return config.loadFile(path, { async: true, watch: true, encoding: 'utf-8' }, types.get(options, 'callback'));
@@ -86,16 +91,6 @@
 						},
 					},
 				}, _options);
-					
-				if (global.process && root.getOptions().settings.fromSource) {
-					mime.setOptions({
-						settings: {
-							resourcesPath: './src/common/res/',
-						},
-					});
-				};
-				
-
 					
 				mime.getTypes = function(fileName, /*optional*/defaultType) {
 					if (types.isNothing(fileName)) {
@@ -165,8 +160,23 @@
 		return DD_MODULES;
 	};
 	
-	if (typeof process !== 'object') {
-		// <PRB> export/import are not yet supported in browsers
-		global.DD_MODULES = exports.add(global.DD_MODULES);
-	};	
-}).call((typeof global !== 'undefined') ? global : ((typeof window !== 'undefined') ? window : this));
+	//! BEGIN_REMOVE()
+	if ((typeof process !== 'object') || (typeof module !== 'object')) {
+	//! END_REMOVE()
+		//! IF_UNDEF("serverSide")
+			// <PRB> export/import are not yet supported in browsers
+			global.DD_MODULES = exports.add(global.DD_MODULES);
+		//! END_IF()
+	//! BEGIN_REMOVE()
+	};
+	//! END_REMOVE()
+}).call(
+	//! BEGIN_REMOVE()
+	(typeof window !== 'undefined') ? window : ((typeof global !== 'undefined') ? global : this)
+	//! END_REMOVE()
+	//! IF_DEF("serverSide")
+	//! 	INJECT("global")
+	//! ELSE()
+	//! 	INJECT("window")
+	//! END_IF()
+);
