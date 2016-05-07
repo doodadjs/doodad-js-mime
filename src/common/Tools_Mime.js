@@ -43,18 +43,6 @@
 		DD_MODULES['Doodad.Tools.Mime'] = {
 			version: /*! REPLACE_BY(TO_SOURCE(VERSION(MANIFEST("name")))) */ null /*! END_REPLACE() */,
 			
-			proto: function(root) {
-				var types = root.Doodad.Types;
-				return {
-					setOptions: types.SUPER(function setOptions(/*paramarray*/) {
-						options = this._super.apply(this, arguments);
-						options.enableDomObjectsModel = types.toBoolean(types.get(options, 'enableDomObjectsModel'));
-						options.defaultScriptTimeout = parseInt(types.get(options, 'defaultScriptTimeout'));
-						return options;
-					}),
-				};
-			},
-			
 			create: function create(root, /*optional*/_options) {
 				"use strict";
 				
@@ -103,6 +91,8 @@
 					var pos = fileName.lastIndexOf('.');
 					if (pos >= 0) {
 						fileName = fileName.slice(pos + 1);
+					} else {
+						fileName = '';
 					};
 					if (defaultType && !types.isArray(defaultType)) {
 						defaultType = [defaultType];
@@ -142,7 +132,7 @@
 									mimeTypes[mType] = [extension];
 								};
 							});
-						}, {});
+						});
 					};
 				};
 				
@@ -153,6 +143,29 @@
 						});
 				};
 
+				
+				mime.setType = function(name, ext) {
+					if (root.DD_ASSERT) {
+						root.DD_ASSERT(types.isString(name), "Invalid name.");
+						root.DD_ASSERT(types.isString(ext) || (types.isArray(ext) && ext.length), "Invalid extension.");
+					};
+					if (!types.isArray(ext)) {
+						ext = [ext];
+					};
+					var current = types.get(__Internal__.mimeTypes, name);
+					if (!current) {
+						current = [];
+					};
+					__Internal__.mimeTypes[name] = current = types.unique(current, ext);
+					tools.forEach(ext, function(n) {
+						var c = types.get(__Internal__.mimeExtensions, n);
+						if (!n) {
+							n = [];
+						};
+						__Internal__.mimeExtensions[n] = types.unique(c, [name]);
+					});
+				};
+				
 
 				return function init(/*optional*/options) {
 					return mime.loadTypes();
