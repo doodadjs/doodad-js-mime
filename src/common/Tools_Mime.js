@@ -126,7 +126,7 @@
 						var mimeTypes = __Internal__.mimeTypes = {};
 						tools.forEach(data.mimeExtensions, function(mTypes, extension) {
 							tools.forEach(mTypes, function(mType) {
-								if (types.hasKey(mimeTypes, mType)) {
+								if (types.has(mimeTypes, mType)) {
 									mimeTypes[mType].push(extension);
 								} else {
 									mimeTypes[mType] = [extension];
