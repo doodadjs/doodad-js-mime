@@ -43,7 +43,7 @@
 		DD_MODULES['Doodad.Tools.Mime'] = {
 			version: /*! REPLACE_BY(TO_SOURCE(VERSION(MANIFEST("name")))) */ null /*! END_REPLACE() */,
 			
-			create: function create(root, /*optional*/_options) {
+			create: function create(root, /*optional*/_options, _shared) {
 				"use strict";
 				
 				var doodad = root.Doodad,
@@ -62,29 +62,41 @@
 				};
 
 
-				mime.setOptions({
+				var __options__ = types.extend({
 					resourcesPath: './res/', // Combined with package's root folder
-					hooks: {
-						// TODO: Make a better and common resources locator and loader
-						resourcesLoader: {
-							locate: function locate(fileName, /*optional*/options) {
-								var Promise = types.getPromise();
-								var filesOptions = files.getOptions();
-								var mimeOptions = mime.getOptions();
-								var path = tools.getCurrentScript((global.document?document.currentScript:module.filename)||(function(){try{throw new Error("");}catch(ex){return ex;}})())
-									.set({file: null})
-									.combine(filesOptions.hooks.pathParser(mimeOptions.resourcesPath))
-									.combine(filesOptions.hooks.pathParser(fileName));
-								return Promise.resolve(path);
-							},
-							load: function load(path, /*optional*/options) {
-								return config.loadFile(path, { async: true, watch: true, encoding: 'utf-8' }, types.get(options, 'callback'));
-							},
-						},
-					},
 				}, _options);
-					
-				mime.getTypes = function(fileName, /*optional*/defaultType) {
+
+				//__options__. = types.to...(__options__.);
+
+				types.freezeObject(__options__);
+
+				mime.getOptions = function() {
+					return __options__;
+				};
+
+				// TODO: Make a better and common resources locator and loader
+				__Internal__.resourcesLoader = {
+					locate: function locate(fileName, /*optional*/options) {
+						var Promise = types.getPromise();
+						return Promise['try'](function() {
+							var path = tools.getCurrentScript((global.document?document.currentScript:module.filename)||(function(){try{throw new Error("");}catch(ex){return ex;}})())
+								.set({file: null})
+								.combine(_shared.pathParser(__options__.resourcesPath))
+								.combine(_shared.pathParser(fileName));
+							return path;
+						});
+					},
+					load: function load(path, /*optional*/options) {
+						return config.loadFile(path, { async: true, watch: true, encoding: 'utf-8' }, types.get(options, 'callback'));
+					},
+				},
+				
+				mime.setResourcesLoader = function setResourcesLoader(loader) {
+					__Internal__.resourcesLoader = loader;
+				};
+				
+				
+				mime.getTypes = function getTypes(fileName, /*optional*/defaultType) {
 					if (types.isNothing(fileName)) {
 						return [];
 					};
@@ -100,7 +112,7 @@
 					return types.get(__Internal__.mimeExtensions, fileName.toLowerCase(), defaultType || ['application/octet-stream']);
 				};
 				
-				mime.getExtensions = function(mimeType, /*optional*/defaultExtension) {
+				mime.getExtensions = function getExtensions(mimeType, /*optional*/defaultExtension) {
 					if (types.isNothing(mimeType)) {
 						return [];
 					};
@@ -110,11 +122,11 @@
 					return types.get(__Internal__.mimeTypes, mimeType.toLowerCase(), defaultExtension || ['']);
 				};
 				
-				mime.getSupportedTypes = function() {
+				mime.getSupportedTypes = function getSupportedTypes() {
 					return types.keys(__Internal__.mimeTypes);
 				};
 				
-				mime.getKnownExtensions = function() {
+				mime.getKnownExtensions = function getKnownExtensions() {
 					return types.keys(__Internal__.mimeExtensions);
 				};
 				
@@ -137,14 +149,14 @@
 				};
 				
 				mime.loadTypes = function loadTypes() {
-					return mime.getOptions().hooks.resourcesLoader.locate('mimeExtensions.json')
+					return __Internal__.resourcesLoader.locate('mimeExtensions.json')
 						.then(function(location) {
-							return mime.getOptions().hooks.resourcesLoader.load(location, {callback: __Internal__.parseMimeExtensions});
+							return __Internal__.resourcesLoader.load(location, {callback: __Internal__.parseMimeExtensions});
 						});
 				};
 
 				
-				mime.setType = function(name, ext) {
+				mime.setType = function setType(name, ext) {
 					if (root.DD_ASSERT) {
 						root.DD_ASSERT(types.isString(name), "Invalid name.");
 						root.DD_ASSERT(types.isString(ext) || (types.isArray(ext) && ext.length), "Invalid extension.");
