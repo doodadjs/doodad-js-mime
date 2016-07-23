@@ -10,7 +10,6 @@ function startup() {
 	console.log( mime.getExtensions('text/plain') );
 };
 
-root.Doodad.Namespaces.load( modules, startup )
-	['catch'](function(err) {
+root.Doodad.Namespaces.load( modules, startup )['catch'](function(err) {
 		console.error(err);
 	});
