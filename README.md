@@ -19,45 +19,21 @@ NOTE: I'm waiting a database from IANA. Thanks to them for listening me.
 
 ## Quick Start
 
-By default, Doodad is running in production mode, which disables every validations. You may want to activate the development mode by setting the "NODE_ENV" environment variable :
-
-Windows :
-```dos
-    set NODE_ENV=development
-```
-Linux :
-```bash
-    export NODE_ENV=development
-```
-Now create the root namespace :
 ```js
-    const root = require('doodad-js').createRoot();
-```
+    "use strict";
 
-You can create a shortcut to the namespaces this way :
-```js
-    const doodad = root.Doodad,
-        types = doodad.Types,
-        tools = doodad.Tools,
-        mixins = doodad.MixIns,
-        interfaces = doodad.Interfaces,
-        extenders = doodad.Extenders,
-        namespaces = doodad.Namespaces,
-        ... ;
-```
-
-Then load 'doodad-js-mime' and its dependencies :
-```js
     const modules = {};
 	require('doodad-js-mime').add(modules);
-    
-    function startup() {
-        const mime = tools.Mime;
-		console.log(mime.getTypes('index.html'));
-		console.log(mime.getExtensions('text/plain'));
-    };
-    
-    namespaces.load(modules, startup);
+
+    require('doodad-js').createRoot(modules);
+		.then(root => {
+			const mime = root.Doodad.Tools.Mime;
+			console.log(mime.getTypes('index.html'));
+			console.log(mime.getExtensions('text/plain'));
+		})
+        .catch(err => {
+            console.error(err);
+        });
 ```
 
 ## Example
