@@ -25,13 +25,11 @@ NOTE: I'm waiting a database from IANA. Thanks to them for listening me.
     const modules = {};
 	require('doodad-js-mime').add(modules);
 
-    require('doodad-js').createRoot(modules);
-		.then(root => {
+    require('doodad-js').createRoot(modules).then(root => {
 			const mime = root.Doodad.Tools.Mime;
 			console.log(mime.getTypes('index.html'));
 			console.log(mime.getExtensions('text/plain'));
-		})
-        .catch(err => {
+		}).catch(err => {
             console.error(err);
         });
 ```
