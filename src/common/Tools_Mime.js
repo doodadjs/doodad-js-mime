@@ -56,9 +56,9 @@ module.exports = {
 
 				types.freezeObject(__options__);
 
-				mime.getOptions = function() {
+				mime.ADD('getOptions', function() {
 					return __options__;
-				};
+				});
 
 				// TODO: Make a better and common resources locator and loader
 				__Internal__.resourcesLoader = {
@@ -77,12 +77,12 @@ module.exports = {
 					},
 				},
 				
-				mime.setResourcesLoader = function setResourcesLoader(loader) {
+				mime.ADD('setResourcesLoader', function setResourcesLoader(loader) {
 					__Internal__.resourcesLoader = loader;
-				};
+				});
 				
 				
-				mime.getTypes = function getTypes(fileName, /*optional*/defaultType) {
+				mime.ADD('getTypes', function getTypes(fileName, /*optional*/defaultType) {
 					if (types.isNothing(fileName)) {
 						return [];
 					};
@@ -96,9 +96,9 @@ module.exports = {
 						defaultType = [defaultType];
 					};
 					return types.get(__Internal__.mimeExtensions, fileName.toLowerCase(), defaultType || ['application/octet-stream']);
-				};
+				});
 				
-				mime.getExtensions = function getExtensions(mimeType, /*optional*/defaultExtension) {
+				mime.ADD('getExtensions', function getExtensions(mimeType, /*optional*/defaultExtension) {
 					if (types.isNothing(mimeType)) {
 						return [];
 					};
@@ -106,15 +106,15 @@ module.exports = {
 						defaultExtension = [defaultExtension];
 					};
 					return types.get(__Internal__.mimeTypes, mimeType.toLowerCase(), defaultExtension || ['']);
-				};
+				});
 				
-				mime.getSupportedTypes = function getSupportedTypes() {
+				mime.ADD('getSupportedTypes', function getSupportedTypes() {
 					return types.keys(__Internal__.mimeTypes);
-				};
+				});
 				
-				mime.getKnownExtensions = function getKnownExtensions() {
+				mime.ADD('getKnownExtensions', function getKnownExtensions() {
 					return types.keys(__Internal__.mimeExtensions);
-				};
+				});
 				
 				
 				__Internal__.parseMimeExtensions = function parseMimeExtensions(err, data) {
@@ -134,15 +134,15 @@ module.exports = {
 					};
 				};
 				
-				mime.loadTypes = function loadTypes() {
+				mime.ADD('loadTypes', function loadTypes() {
 					return __Internal__.resourcesLoader.locate('mimeExtensions.json')
 						.then(function(location) {
 							return __Internal__.resourcesLoader.load(location, {callback: __Internal__.parseMimeExtensions});
 						});
-				};
+				});
 
 				
-				mime.setType = function setType(name, ext) {
+				mime.ADD('setType', function setType(name, ext) {
 					if (root.DD_ASSERT) {
 						root.DD_ASSERT(types.isString(name), "Invalid name.");
 						root.DD_ASSERT(types.isString(ext) || (types.isArray(ext) && ext.length), "Invalid extension.");
@@ -162,7 +162,7 @@ module.exports = {
 						};
 						__Internal__.mimeExtensions[n] = types.unique(c, [name]);
 					});
-				};
+				});
 				
 
 				return function init(/*optional*/options) {
