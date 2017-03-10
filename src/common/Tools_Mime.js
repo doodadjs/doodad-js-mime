@@ -32,7 +32,7 @@ module.exports = {
 			create: function create(root, /*optional*/_options, _shared) {
 				"use strict";
 				
-				var doodad = root.Doodad,
+				const doodad = root.Doodad,
 					types = doodad.Types,
 					tools = doodad.Tools,
 					files = tools.Files,
@@ -42,13 +42,13 @@ module.exports = {
 					mime = tools.Mime;
 
 
-				var __Internal__ = {
+				const __Internal__ = {
 					mimeExtensions: null,
 					mimeTypes: null,
 				};
 
 
-				var __options__ = types.extend({
+				const __options__ = types.extend({
 					resourcesPath: './res/', // Combined with package's root folder
 				}, _options);
 
@@ -63,8 +63,8 @@ module.exports = {
 				// TODO: Make a better and common resources locator and loader
 				__Internal__.resourcesLoader = {
 					locate: function locate(fileName, /*optional*/options) {
-						var Promise = types.getPromise();
-						return Promise['try'](function() {
+						const Promise = types.getPromise();
+						return Promise.try(function() {
 							var path = tools.getCurrentScript((global.document?document.currentScript:module.filename)||(function(){try{throw new Error("");}catch(ex){return ex;}})())
 								.set({file: null})
 								.combine(_shared.pathParser(__options__.resourcesPath))
@@ -86,7 +86,7 @@ module.exports = {
 					if (types.isNothing(fileName)) {
 						return [];
 					};
-					var pos = fileName.lastIndexOf('.');
+					const pos = fileName.lastIndexOf('.');
 					if (pos >= 0) {
 						fileName = fileName.slice(pos + 1);
 					} else {
@@ -121,7 +121,7 @@ module.exports = {
 		//console.log(data);
 					if (!err) {
 						__Internal__.mimeExtensions = data.mimeExtensions;
-						var mimeTypes = __Internal__.mimeTypes = {};
+						const mimeTypes = __Internal__.mimeTypes = {};
 						tools.forEach(data.mimeExtensions, function(mTypes, extension) {
 							tools.forEach(mTypes, function(mType) {
 								if (types.has(mimeTypes, mType)) {
@@ -145,20 +145,20 @@ module.exports = {
 				mime.ADD('setType', function setType(name, ext) {
 					if (root.DD_ASSERT) {
 						root.DD_ASSERT(types.isString(name), "Invalid name.");
-						root.DD_ASSERT(types.isString(ext) || (types.isArray(ext) && ext.length), "Invalid extension.");
+						root.DD_ASSERT(types.isString(ext) || types.isArray(ext), "Invalid extension.");
 					};
 					if (!types.isArray(ext)) {
 						ext = [ext];
 					};
-					var current = types.get(__Internal__.mimeTypes, name);
+					let current = types.get(__Internal__.mimeTypes, name);
 					if (!current) {
 						current = [];
 					};
 					__Internal__.mimeTypes[name] = current = types.unique(current, ext);
 					tools.forEach(ext, function(n) {
-						var c = types.get(__Internal__.mimeExtensions, n);
-						if (!n) {
-							n = [];
+						let c = types.get(__Internal__.mimeExtensions, n);
+						if (!c) {
+							c = [];
 						};
 						__Internal__.mimeExtensions[n] = types.unique(c, [name]);
 					});
