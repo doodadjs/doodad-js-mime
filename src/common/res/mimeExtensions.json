@@ -605,6 +605,13 @@
 		"xtp": ["application/octet-stream"],
 		"xwd": ["image/x-xwindowdump"],
 		"z": ["application/x-compress"],
-		"zip": ["application/x-zip-compressed"]
+		"zip": ["application/x-zip-compressed"],
+		
+		"//": "=================",
+		"//": "Doodad Mime Types",
+		"//": "=================",
+		"ddt": ["application/xml", "text/xml"],
+		"ddtx": ["application/javascript"],
+		"ddi": ["application/xml", "text/xml"]
 	}
 }
