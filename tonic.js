@@ -1,13 +1,16 @@
-"use strict";
-
-const modules = {};
-require('doodad-js-mime').add(modules);
-
-require('doodad-js').createRoot(modules)
+require('doodad-js').createRoot()
+	.then(root => {
+		return root.Doodad.Modules.load([
+			{
+				module: 'doodad-js-mime'
+			}
+		]);
+	})
 	.then(root => {
 		const mime = root.Doodad.Tools.Mime;
-		console.log( mime.getExtensions('text/plain') );
-	})
-	.catch(err => {
+		return mime.getExtensions('text/plain');
+	}).then(exts => {
+		console.log(exts);
+	}).catch(err => {
 		console.error(err);
 	});

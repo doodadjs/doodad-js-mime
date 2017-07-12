@@ -36,7 +36,26 @@ NOTE: I'm waiting a database from IANA. Thanks to them for listening me.
 
 ## Example
 
-Please install "doodad-js-test" and browse its source code. Begin with file "./src/server/units/index.js".
+```js
+	"use strict";
+
+	require('doodad-js').createRoot()
+		.then(root => {
+			return root.Doodad.Modules.load([
+				{
+					module: 'doodad-js-mime'
+				}
+			]);
+		})
+		.then(root => {
+			const mime = root.Doodad.Tools.Mime;
+			return mime.getExtensions('text/plain');
+		}).then(exts => {
+			console.log(exts);
+		}).catch(err => {
+			console.error(err);
+		});
+```
 
 ## Other available packages
 
