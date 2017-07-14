@@ -610,8 +610,8 @@
 		"//": "=================",
 		"//": "Doodad Mime Types",
 		"//": "=================",
-		"ddt": ["application/xml", "text/xml"],
-		"ddtx": ["application/javascript"],
+		"ddt": ["application/xml", "text/xml", "text/html"],
+		"ddtx": ["application/javascript", "text/html"],
 		"ddi": ["application/xml", "text/xml"]
 	}
 }
