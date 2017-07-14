@@ -67,8 +67,8 @@ module.exports = {
 						return Promise.try(function() {
 							var path = tools.getCurrentScript((global.document?document.currentScript:module.filename)||(function(){try{throw new Error("");}catch(ex){return ex;}})())
 								.set({file: null})
-								.combine(_shared.pathParser(__options__.resourcesPath))
-								.combine(_shared.pathParser(fileName));
+								.combine(files.parsePath(__options__.resourcesPath))
+								.combine(files.parsePath(fileName));
 							return path;
 						});
 					},
