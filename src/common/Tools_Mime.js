@@ -86,6 +86,10 @@ module.exports = {
 					if (types.isNothing(fileName)) {
 						return [];
 					};
+					if (types._instanceof(fileName, [files.Url, files.Path])) {
+						fileName = fileName.file || '';
+					};
+					// NOTE: Mime types are not having extensions like ".min.js". Only ".js" is taken.
 					const pos = fileName.lastIndexOf('.');
 					if (pos >= 0) {
 						fileName = fileName.slice(pos + 1);
@@ -105,7 +109,7 @@ module.exports = {
 					if (defaultExtension && !types.isArray(defaultExtension)) {
 						defaultExtension = [defaultExtension];
 					};
-					return types.get(__Internal__.mimeTypes, mimeType.toLowerCase(), defaultExtension || ['']);
+					return types.get(__Internal__.mimeTypes, mimeType.toLowerCase(), defaultExtension || []);
 				});
 				
 				mime.ADD('getSupportedTypes', function getSupportedTypes() {
