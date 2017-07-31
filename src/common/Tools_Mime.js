@@ -82,7 +82,7 @@ module.exports = {
 				});
 				
 				
-				mime.ADD('getTypes', function getTypes(fileName, /*optional*/defaultType) {
+				mime.ADD('getTypes', function getTypes(fileName) {
 					if (types.isNothing(fileName)) {
 						return [];
 					};
@@ -96,20 +96,14 @@ module.exports = {
 					} else {
 						fileName = '';
 					};
-					if (defaultType && !types.isArray(defaultType)) {
-						defaultType = [defaultType];
-					};
-					return types.get(__Internal__.mimeExtensions, fileName.toLowerCase(), defaultType || ['application/octet-stream']);
+					return types.get(__Internal__.mimeExtensions, fileName.toLowerCase());
 				});
 				
-				mime.ADD('getExtensions', function getExtensions(mimeType, /*optional*/defaultExtension) {
+				mime.ADD('getExtensions', function getExtensions(mimeType) {
 					if (types.isNothing(mimeType)) {
 						return [];
 					};
-					if (defaultExtension && !types.isArray(defaultExtension)) {
-						defaultExtension = [defaultExtension];
-					};
-					return types.get(__Internal__.mimeTypes, mimeType.toLowerCase(), defaultExtension || []);
+					return types.get(__Internal__.mimeTypes, mimeType.toLowerCase());
 				});
 				
 				mime.ADD('getSupportedTypes', function getSupportedTypes() {
