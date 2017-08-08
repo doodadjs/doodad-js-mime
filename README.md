@@ -85,6 +85,8 @@ NOTE: I'm waiting a database from IANA. Thanks to them for listening me.
 
   [Apache-2.0][license-url]
 
+  This package also contains a modified database from "MimeTypeMap", licensed under MIT.
+
 [npm-image]: https://img.shields.io/npm/v/doodad-js-mime.svg
 [npm-url]: https://npmjs.org/package/doodad-js-mime
 [license-url]: http://opensource.org/licenses/Apache-2.0
