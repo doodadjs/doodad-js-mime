@@ -48,7 +48,7 @@ module.exports = {
 				};
 
 
-				const __options__ = types.extend({
+				const __options__ = tools.extend({
 					resourcesPath: './res/', // Combined with package's root folder
 				}, _options);
 
@@ -152,13 +152,13 @@ module.exports = {
 					if (!current) {
 						current = [];
 					};
-					__Internal__.mimeTypes[name] = current = types.unique(current, ext);
+					__Internal__.mimeTypes[name] = current = tools.unique(current, ext);
 					tools.forEach(ext, function(n) {
 						let c = types.get(__Internal__.mimeExtensions, n);
 						if (!c) {
 							c = [];
 						};
-						__Internal__.mimeExtensions[n] = types.unique(c, [name]);
+						__Internal__.mimeExtensions[n] = tools.unique(c, [name]);
 					});
 				});
 				
