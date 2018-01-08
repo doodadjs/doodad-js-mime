@@ -1,4 +1,4 @@
-"doodad-js" Mime (beta).
+"@doodad-js" Mime (beta).
 
 [![NPM Version][npm-image]][npm-url]
  
@@ -7,7 +7,7 @@
 ## Installation
 
 ```bash
-$ npm install doodad-js-mime
+$ npm install @doodad-js/mime
 ```
 
 ## Features
@@ -23,9 +23,9 @@ NOTE: I'm waiting a database from IANA. Thanks to them for listening me.
     "use strict";
 
     const modules = {};
-	require('doodad-js-mime').add(modules);
+	require('@doodad-js/mime').add(modules);
 
-    require('doodad-js').createRoot(modules).then(root => {
+    require('@doodad-js/core').createRoot(modules).then(root => {
 			const mime = root.Doodad.Tools.Mime;
 			console.log(mime.getTypes('index.html'));
 			console.log(mime.getExtensions('text/plain'));
@@ -39,11 +39,11 @@ NOTE: I'm waiting a database from IANA. Thanks to them for listening me.
 ```js
 	"use strict";
 
-	require('doodad-js').createRoot()
+	require('@doodad-js/core').createRoot()
 		.then(root => {
 			return root.Doodad.Modules.load([
 				{
-					module: 'doodad-js-mime'
+					module: '@doodad-js/mime'
 				}
 			]);
 		})
@@ -59,27 +59,27 @@ NOTE: I'm waiting a database from IANA. Thanks to them for listening me.
 
 ## Other available packages
 
-  - **doodad-js**: Object-oriented programming framework (release)
-  - **doodad-js-cluster**: Cluster manager (alpha)
-  - **doodad-js-dates**: Dates formatting (beta)
-  - **doodad-js-http**: Http server (alpha)
-  - **doodad-js-http_jsonrpc**: JSON-RPC over http server (alpha)
-  - **doodad-js-io**: I/O module (alpha)
-  - **doodad-js-ipc**: IPC/RPC server (alpha)
-  - **doodad-js-json**: JSON parser (alpha)
-  - **doodad-js-loader**: Scripts loader (beta)
-  - **doodad-js-locale**: Locales (beta)
-  - **doodad-js-make**: Make tools for doodad (alpha)
-  - **doodad-js-mime**: Mime types (beta)
-  - **doodad-js-minifiers**: Javascript minifier used by doodad (alpha)
-  - **doodad-js-safeeval**: SafeEval (beta)
-  - **doodad-js-server**: Servers base module (alpha)
-  - **doodad-js-templates**: HTML page templates (alpha)
-  - **doodad-js-terminal**: Terminal (alpha)
-  - **doodad-js-test**: Test application
-  - **doodad-js-unicode**: Unicode Tools (beta)
-  - **doodad-js-widgets**: Widgets base module (alpha)
-  - **doodad-js-xml**: XML Parser (beta)
+  - **@doodad-js/core**: Object-oriented programming framework (release)
+  - **@doodad-js/cluster**: Cluster manager (alpha)
+  - **@doodad-js/dates**: Dates formatting (beta)
+  - **@doodad-js/http**: Http server (alpha)
+  - **@doodad-js/http_jsonrpc**: JSON-RPC over http server (alpha)
+  - **@doodad-js/io**: I/O module (alpha)
+  - **@doodad-js/ipc**: IPC/RPC server (alpha)
+  - **@doodad-js/json**: JSON parser (alpha)
+  - **@doodad-js/loader**: Scripts loader (beta)
+  - **@doodad-js/locale**: Locales (beta)
+  - **@doodad-js/make**: Make tools for doodad (alpha)
+  - **@doodad-js/mime**: Mime types (beta)
+  - **@doodad-js/minifiers**: Javascript minifier used by doodad (alpha)
+  - **@doodad-js/safeeval**: SafeEval (beta)
+  - **@doodad-js/server**: Servers base module (alpha)
+  - **@doodad-js/templates**: HTML page templates (alpha)
+  - **@doodad-js/terminal**: Terminal (alpha)
+  - **@doodad-js/test**: Test application
+  - **@doodad-js/unicode**: Unicode Tools (beta)
+  - **@doodad-js/widgets**: Widgets base module (alpha)
+  - **@doodad-js/xml**: XML Parser (beta)
   
 ## License
 
