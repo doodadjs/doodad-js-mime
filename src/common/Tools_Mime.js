@@ -35,8 +35,8 @@ exports.add = function add(DD_MODULES) {
 				types = doodad.Types,
 				tools = doodad.Tools,
 				files = tools.Files,
-				namespaces = doodad.Namespaces,
-				modules = doodad.Modules,
+				//namespaces = doodad.Namespaces,
+				//modules = doodad.Modules,
 				config = tools.Config,
 				mime = tools.Mime;
 
@@ -64,7 +64,7 @@ exports.add = function add(DD_MODULES) {
 				locate: function locate(fileName, /*optional*/options) {
 					const Promise = types.getPromise();
 					return Promise.try(function() {
-						var path = tools.getCurrentScript((global.document?document.currentScript:module.filename)||(function(){try{throw new Error("");}catch(ex){return ex;}})())
+						const path = tools.getCurrentScript((global.document ? document.currentScript : module.filename) || (function() { try{ throw new Error(""); }catch(ex) { return ex; } })())
 							.set({file: null})
 							.combine(files.parsePath(__options__.resourcesPath))
 							.combine(files.parsePath(fileName));
@@ -74,7 +74,7 @@ exports.add = function add(DD_MODULES) {
 				load: function load(path, /*optional*/options) {
 					return config.load(path, { async: true, watch: true, encoding: 'utf-8' }, types.get(options, 'callback'));
 				},
-			},
+			};
 				
 			mime.ADD('setResourcesLoader', function setResourcesLoader(loader) {
 				__Internal__.resourcesLoader = loader;
