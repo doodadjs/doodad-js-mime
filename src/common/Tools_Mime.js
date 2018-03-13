@@ -33,14 +33,21 @@ exports.add = function add(DD_MODULES) {
 	DD_MODULES = (DD_MODULES || {});
 	DD_MODULES['Doodad.Tools.Mime'] = {
 		version: /*! REPLACE_BY(TO_SOURCE(VERSION(MANIFEST("name")))) */ null /*! END_REPLACE()*/,
+		dependencies: [
+			{
+				name: 'Doodad.Tools.Mime/Resources',
+				optional: true,
+			},
+		],
 		create: function create(root, /*optional*/_options, _shared) {
 			const doodad = root.Doodad,
 				types = doodad.Types,
 				tools = doodad.Tools,
 				files = tools.Files,
 				//namespaces = doodad.Namespaces,
-				//modules = doodad.Modules,
-				config = tools.Config,
+				modules = doodad.Modules,
+				resources = doodad.Resources,
+				//config = tools.Config,
 				mime = tools.Mime;
 
 
@@ -50,40 +57,19 @@ exports.add = function add(DD_MODULES) {
 			};
 
 
-			const __options__ = tools.extend({
-				resourcesPath: './res/', // Combined with package's root folder
-			}, _options);
+			//const __options__ = tools.extend({
+			//	resourcesPath: './res/', // Combined with package's root folder
+			//}, _options);
 
 			//__options__. = types.to...(__options__.);
 
-			types.freezeObject(__options__);
+			//types.freezeObject(__options__);
 
-			mime.ADD('getOptions', function() {
-				return __options__;
-			});
+			//mime.ADD('getOptions', function() {
+			//	return __options__;
+			//});
 
-			// TODO: Make a better and common resources locator and loader
-			__Internal__.resourcesLoader = {
-				locate: function locate(fileName, /*optional*/options) {
-					const Promise = types.getPromise();
-					return Promise.try(function() {
-						const path = tools.getCurrentScript((global.document ? document.currentScript : module.filename) || (function() { try{ throw new Error(""); }catch(ex) { return ex; } })())
-							.set({file: null})
-							.combine(files.parsePath(__options__.resourcesPath))
-							.combine(files.parsePath(fileName));
-						return path;
-					});
-				},
-				load: function load(path, /*optional*/options) {
-					return config.load(path, { async: true, watch: true, encoding: 'utf-8' }, types.get(options, 'callback'));
-				},
-			};
-				
-			mime.ADD('setResourcesLoader', function setResourcesLoader(loader) {
-				__Internal__.resourcesLoader = loader;
-			});
-				
-				
+
 			mime.ADD('getTypes', function getTypes(fileName) {
 				if (types.isNothing(fileName)) {
 					return [];
@@ -117,28 +103,28 @@ exports.add = function add(DD_MODULES) {
 			});
 				
 				
-			__Internal__.parseMimeExtensions = function parseMimeExtensions(err, data) {
+			__Internal__.parseMimeExtensions = function parseMimeExtensions(data) {
 	//console.log(data);
-				if (!err) {
-					__Internal__.mimeExtensions = data.mimeExtensions;
-					const mimeTypes = __Internal__.mimeTypes = {};
-					tools.forEach(data.mimeExtensions, function(mTypes, extension) {
-						tools.forEach(mTypes, function(mType) {
-							if (types.has(mimeTypes, mType)) {
-								mimeTypes[mType].push(extension);
-							} else {
-								mimeTypes[mType] = [extension];
-							};
-						});
+				__Internal__.mimeExtensions = data.mimeExtensions;
+				const mimeTypes = __Internal__.mimeTypes = {};
+				tools.forEach(data.mimeExtensions, function(mTypes, extension) {
+					tools.forEach(mTypes, function(mType) {
+						if (types.has(mimeTypes, mType)) {
+							mimeTypes[mType].push(extension);
+						} else {
+							mimeTypes[mType] = [extension];
+						};
 					});
-				};
+				});
 			};
 				
 			mime.ADD('loadTypes', function loadTypes() {
-				return __Internal__.resourcesLoader.locate('mimeExtensions.json')
+				const loader = mime.getResourcesLoader();
+				return loader.locate('./common/res/mimeExtensions.json')
 					.then(function(location) {
-						return __Internal__.resourcesLoader.load(location, {callback: __Internal__.parseMimeExtensions});
-					});
+						return loader.load(location);
+					})
+					.then(__Internal__.parseMimeExtensions);
 			});
 
 				
@@ -165,10 +151,16 @@ exports.add = function add(DD_MODULES) {
 			});
 				
 
-			return function init(/*optional*/options) {
-				return mime.loadTypes();
-			};
-				
+			return modules.locate('@doodad-js/mime')
+				.then(function(path) {
+					const basePath = path.set({file: null});
+					const rootOpts = root.getOptions();
+					resources.createResourcesLoader(mime, (rootOpts.fromSource ? basePath.combine('./src') : (root.serverSide ? basePath.combine('./build') : basePath)));
+
+					return function init(/*optional*/options) {
+						return mime.loadTypes();
+					};
+				});
 		},
 	};
 	return DD_MODULES;

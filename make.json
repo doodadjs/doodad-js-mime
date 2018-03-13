@@ -43,6 +43,7 @@
 	],
 	"resources": [
 		{
+			"name": "Doodad.Tools.Mime/Resources",
 			"src": "common/res",
 			"namespace": "Doodad.Tools.Mime",
 			"client": true,
