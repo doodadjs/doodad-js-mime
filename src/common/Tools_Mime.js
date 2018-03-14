@@ -57,19 +57,6 @@ exports.add = function add(DD_MODULES) {
 			};
 
 
-			//const __options__ = tools.extend({
-			//	resourcesPath: './res/', // Combined with package's root folder
-			//}, _options);
-
-			//__options__. = types.to...(__options__.);
-
-			//types.freezeObject(__options__);
-
-			//mime.ADD('getOptions', function() {
-			//	return __options__;
-			//});
-
-
 			mime.ADD('getTypes', function getTypes(fileName) {
 				if (types.isNothing(fileName)) {
 					return [];
@@ -120,10 +107,7 @@ exports.add = function add(DD_MODULES) {
 				
 			mime.ADD('loadTypes', function loadTypes() {
 				const loader = mime.getResourcesLoader();
-				return loader.locate('./common/res/mimeExtensions.json')
-					.then(function(location) {
-						return loader.load(location);
-					})
+				return loader.load('./common/res/mimeExtensions.json')
 					.then(__Internal__.parseMimeExtensions);
 			});
 
