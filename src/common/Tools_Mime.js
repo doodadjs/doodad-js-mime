@@ -135,16 +135,16 @@ exports.add = function add(modules) {
 			});
 				
 
-			return modules.locate('@doodad-js/mime')
-				.then(function(path) {
-					const basePath = path.set({file: null});
-					const rootOpts = root.getOptions();
-					resources.createResourcesLoader(mime, (rootOpts.fromSource ? basePath.combine('./src') : (root.serverSide ? basePath.combine('./build') : basePath)));
+            return function init(options) {
+				const Promise = types.getPromise();
+				return Promise.resolve(root.serverSide ? files.Path.parse(module.filename) : modules.locate(/*! INJECT(TO_SOURCE(MANIFEST('name'))) */))
+					.then(function(location) {
+						location = location.set({file: ''});
+						resources.createResourcesLoader(mime, (root.serverSide ? location.moveUp(1) : location));
 
-					return function init(/*optional*/options) {
 						return mime.loadTypes();
-					};
-				});
+					});
+            };
 		},
 	};
 	return modules;
