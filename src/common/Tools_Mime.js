@@ -26,7 +26,7 @@
 
 //! IF_SET("mjs")
 //! ELSE()
-	"use strict";
+"use strict";
 //! END_IF()
 
 exports.add = function add(modules) {
@@ -91,7 +91,7 @@ exports.add = function add(modules) {
 
 
 			__Internal__.parseMimeExtensions = function parseMimeExtensions(data) {
-	//console.log(data);
+				//console.log(data);
 				__Internal__.mimeExtensions = data.mimeExtensions;
 				const mimeTypes = __Internal__.mimeTypes = {};
 				tools.forEach(data.mimeExtensions, function(mTypes, extension) {
@@ -135,7 +135,7 @@ exports.add = function add(modules) {
 			});
 
 
-            return function init(options) {
+			return function init(options) {
 				const Promise = types.getPromise();
 				return Promise.resolve(root.serverSide ? files.Path.parse(module.filename) : modules.locate(/*! INJECT(TO_SOURCE(MANIFEST('name'))) */))
 					.then(function(location) {
@@ -144,7 +144,7 @@ exports.add = function add(modules) {
 
 						return mime.loadTypes();
 					});
-            };
+			};
 		},
 	};
 	return modules;
