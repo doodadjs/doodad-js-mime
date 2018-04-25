@@ -73,23 +73,23 @@ exports.add = function add(modules) {
 				};
 				return types.get(__Internal__.mimeExtensions, fileName.toLowerCase());
 			});
-				
+
 			mime.ADD('getExtensions', function getExtensions(mimeType) {
 				if (types.isNothing(mimeType)) {
 					return [];
 				};
 				return types.get(__Internal__.mimeTypes, mimeType.toLowerCase());
 			});
-				
+
 			mime.ADD('getSupportedTypes', function getSupportedTypes() {
 				return types.keys(__Internal__.mimeTypes);
 			});
-				
+
 			mime.ADD('getKnownExtensions', function getKnownExtensions() {
 				return types.keys(__Internal__.mimeExtensions);
 			});
-				
-				
+
+
 			__Internal__.parseMimeExtensions = function parseMimeExtensions(data) {
 	//console.log(data);
 				__Internal__.mimeExtensions = data.mimeExtensions;
@@ -104,14 +104,14 @@ exports.add = function add(modules) {
 					});
 				});
 			};
-				
+
 			mime.ADD('loadTypes', function loadTypes() {
 				const loader = mime.getResourcesLoader();
 				return loader.load('./common/res/mimeExtensions.json')
 					.then(__Internal__.parseMimeExtensions);
 			});
 
-				
+
 			mime.ADD('setType', function setType(name, ext) {
 				if (root.DD_ASSERT) {
 					root.DD_ASSERT(types.isString(name), "Invalid name.");
@@ -133,7 +133,7 @@ exports.add = function add(modules) {
 					__Internal__.mimeExtensions[n] = tools.unique(c, [name]);
 				});
 			});
-				
+
 
             return function init(options) {
 				const Promise = types.getPromise();
