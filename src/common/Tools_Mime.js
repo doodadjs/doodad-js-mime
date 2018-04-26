@@ -93,7 +93,8 @@ exports.add = function add(modules) {
 			__Internal__.parseMimeExtensions = function parseMimeExtensions(data) {
 				//console.log(data);
 				__Internal__.mimeExtensions = data.mimeExtensions;
-				const mimeTypes = __Internal__.mimeTypes = {};
+				const mimeTypes = {};
+				__Internal__.mimeTypes = mimeTypes;
 				tools.forEach(data.mimeExtensions, function(mTypes, extension) {
 					tools.forEach(mTypes, function(mType) {
 						if (types.has(mimeTypes, mType)) {
@@ -124,7 +125,8 @@ exports.add = function add(modules) {
 				if (!current) {
 					current = [];
 				};
-				__Internal__.mimeTypes[name] = current = tools.unique(current, ext);
+				current = tools.unique(current, ext);
+				__Internal__.mimeTypes[name] = current;
 				tools.forEach(ext, function(n) {
 					let c = types.get(__Internal__.mimeExtensions, n);
 					if (!c) {
