@@ -235,7 +235,7 @@
 		"jpg": ["image/jpeg"],
 		"js": ["application/javascript", "application/x-javascript", "text/javascript"],
 		"json": ["application/json"],
-		"json5": ["application/json"],
+		"json5": ["application/json5"],
 		"jsx": ["text/jscript"],
 		"jsxbin": ["text/plain"],
 		"latex": ["application/x-latex"],
