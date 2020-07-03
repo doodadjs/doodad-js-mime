@@ -45,7 +45,7 @@ exports.add = function add(modules) {
 				tools = doodad.Tools,
 				files = tools.Files,
 				//namespaces = doodad.Namespaces,
-				modules = doodad.Modules,
+				//modules = doodad.Modules,
 				resources = doodad.Resources,
 				//config = tools.Config,
 				mime = tools.Mime;
@@ -107,8 +107,7 @@ exports.add = function add(modules) {
 			};
 
 			mime.ADD('loadTypes', function loadTypes() {
-				const loader = mime.getResourcesLoader();
-				return loader.load('./common/res/mimeExtensions.json')
+				return resources.load('./common/res/mimeExtensions.json', {module: '@doodad-js/mime'})
 					.then(__Internal__.parseMimeExtensions);
 			});
 
@@ -138,14 +137,7 @@ exports.add = function add(modules) {
 
 
 			return function init(options) {
-				const Promise = types.getPromise();
-				return Promise.resolve(root.serverSide ? files.Path.parse(module.filename) : modules.locate(/*! INJECT(TO_SOURCE(MANIFEST('name'))) */))
-					.then(function(location) {
-						location = location.set({file: ''});
-						resources.createResourcesLoader(mime, (root.serverSide ? location.moveUp(1) : location));
-
-						return mime.loadTypes();
-					});
+				return mime.loadTypes();
 			};
 		},
 	};
